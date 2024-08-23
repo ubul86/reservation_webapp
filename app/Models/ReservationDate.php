@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ReservationDate extends Model
 {
@@ -15,7 +16,10 @@ class ReservationDate extends Model
 
     protected $fillable = ['date'];
 
-    public function reservationTimes()
+    /**
+     * @return HasMany<ReservationTime>
+     */
+    public function reservationTimes(): HasMany
     {
         return $this->hasMany(ReservationTime::class);
     }
