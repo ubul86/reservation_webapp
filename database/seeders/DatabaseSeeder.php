@@ -12,9 +12,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([
-            UsersTableSeeder::class,
-        ]);
+
+        \App\Models\User::factory(10)->create();
+        \App\Models\Place::factory(5)->create();
+        \App\Models\ReservationDate::factory(30)->create();
+
+        \App\Models\ReservationTime::factory(50)->create();
+
         // \App\Models\User::factory(10)->create();
 
         // \App\Models\User::factory()->create([
