@@ -10,19 +10,8 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Http\Response;
 
-class UserRepository implements UserRegistrationInterface, UserRepositoryInterface
+class UserRepository implements UserRepositoryInterface
 {
-    public function register(array $data): User
-    {
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
-
-        return $user;
-    }
-
     public function getUser(): mixed
     {
         try {

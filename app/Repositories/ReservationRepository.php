@@ -27,6 +27,7 @@ class ReservationRepository implements ReservationRepositoryInterface
                 return [
                     'hour' => $reservation->hour,
                     'place' => $reservation->place->name,
+                    'place_id' => $reservation->place->id,
                     'user' => $reservation->user->name,
                     'reservation_date' => $reservation->reservationDate->date,
                 ];

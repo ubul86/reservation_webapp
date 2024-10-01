@@ -1,6 +1,9 @@
 <template>
     <v-app>
         <Header />
+        <v-main>
+            <router-view></router-view>
+        </v-main>
     </v-app>
 </template>
 
@@ -11,18 +14,9 @@ export default {
     components: {
         Header,
     },
-    computed: {
-    },
-    data() {
-        return {
-        };
-    },
     created() {
         this.$store.dispatch("initializeUser");
+        this.$store.dispatch("storeUserLocation");
     },
 };
 </script>
-
-<style>
-@import "vuetify/dist/vuetify.min.css";
-</style>

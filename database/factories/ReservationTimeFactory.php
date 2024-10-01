@@ -3,23 +3,33 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\User;
+use App\Models\Place;
+use App\Models\ReservationDate;
+use App\Models\ReservationTime;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ReservationTime>
- */
 class ReservationTimeFactory extends Factory
 {
-
-    protected $model = \App\Models\ReservationTime::class;
+    protected $model = ReservationTime::class;
 
     public function definition()
     {
+        do {
+            $userId = User::inRandomOrder()->first()->id;
+            $placeId = Place::inRandomOrder()->first()->id;
+            $reservationDateId = ReservationDate::inRandomOrder()->first()->id;
+            $hour = $this->faker->numberBetween(8, 20);
+        } while (ReservationTime::where('user_id', $userId)
+            ->where('place_id', $placeId)
+            ->where('reservation_date_id', $reservationDateId)
+            ->where('hour', $hour)
+            ->exists());
+
         return [
-            'user_id' => \App\Models\User::factory(),
-            'reservation_date_id' => \App\Models\ReservationDate::factory(),
-            'place_id' => \App\Models\Place::factory(),
-            'hour' => $this->faker->numberBetween(8, 20),
+            'user_id' => $userId,
+            'place_id' => $placeId,
+            'reservation_date_id' => $reservationDateId,
+            'hour' => $hour,
         ];
     }
-
 }

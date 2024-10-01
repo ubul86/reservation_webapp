@@ -3,7 +3,7 @@
         <v-dialog v-model="dialog" persistent max-width="400px">
             <v-card>
                 <v-card-title>
-                    <span class="headline">Login</span>
+                    <span class="headline">Registration</span>
                     <v-spacer></v-spacer>
                     <v-btn icon @click="close">
                         <v-icon>mdi-close</v-icon>
@@ -11,10 +11,15 @@
                 </v-card-title>
 
                 <v-card-text>
-                    <v-form @submit.prevent="login">
+                    <v-form @submit.prevent="registration">
                         <v-text-field
-                            v-model="user.username"
-                            label="Username"
+                            v-model="user.name"
+                            label="Name"
+                            required
+                        ></v-text-field>
+                        <v-text-field
+                            v-model="user.email"
+                            label="Email"
                             required
                         ></v-text-field>
                         <v-text-field
@@ -24,7 +29,7 @@
                             required
                         ></v-text-field>
                         <v-card-actions>
-                            <v-btn color="primary" type="submit">Login</v-btn>
+                            <v-btn color="primary" type="submit">Registration</v-btn>
                             <v-btn @click="close">Cancel</v-btn>
                         </v-card-actions>
                     </v-form>
@@ -42,7 +47,8 @@ export default {
         return {
             dialog: this.value,
             user: {
-                username: "",
+                name: "",
+                email: "",
                 password: "",
             },
         };
@@ -62,16 +68,15 @@ export default {
         },
     },
     methods: {
-        async login() {
+        async registration() {
             try {
-                await this.$store.dispatch("login", this.user);
-                this.$emit("login-success");
+                await this.$store.dispatch("registration", this.user);
+                this.$emit("registration-success");
                 this.close();
             } catch (error) {
-                console.error("Login error:", error);
+                console.error("Registration error:", error);
             }
         },
-
         close() {
             this.dialog = false;
         },

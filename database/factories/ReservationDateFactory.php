@@ -15,7 +15,7 @@ class ReservationDateFactory extends Factory
     public function definition()
     {
         return [
-            'date' => $this->faker->date(),
+            'date' => $this->faker->unique()->dateTimeBetween('-60 days', 'now')->format('Y-m-d'),
         ];
     }
 

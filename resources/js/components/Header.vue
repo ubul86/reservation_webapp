@@ -4,7 +4,10 @@
         <v-toolbar-title>My App</v-toolbar-title>
         <v-spacer></v-spacer>
         <div v-if="!isAuthenticated">
-            <v-btn @click="openLoginPopup">Login</v-btn>
+            <AuthPopupComponent
+                v-model="showAuthPopup"
+                @auth-success="handleAuthSuccess"
+            />
         </div>
         <div v-else>
             <v-btn @click="logout">Logout</v-btn>
@@ -12,19 +15,16 @@
         <v-btn @click="toggleTheme" icon>
             <v-icon :color="iconColorClass">{{ iconName }}</v-icon>
         </v-btn>
-        <LoginPopup
-            v-model="showLoginPopup"
-            @login-success="handleLoginSuccess"
-        />
+
     </v-app-bar>
 </template>
 
 <script>
 import { mapState, mapActions } from "vuex";
-import LoginPopup from "./LoginPopup.vue";
+import AuthPopupComponent from "@/components/AuthPopupComponent.vue";
 
 export default {
-    components: { LoginPopup },
+    components: { AuthPopupComponent },
     computed: {
         ...mapState(["isAuthenticated"]),
         iconColorClass() {
@@ -39,7 +39,7 @@ export default {
     data() {
         return {
             isDarkMode: localStorage.getItem("theme") === "dark",
-            showLoginPopup: false,
+            showAuthPopup: false,
         };
     },
     mounted() {
@@ -47,17 +47,23 @@ export default {
     },
     methods: {
         ...mapActions(["logout"]),
-        openLoginPopup() {
-            this.showLoginPopup = true;
+        openAuthPopup() {
+            this.showAuthPopup = true;
         },
         toggleTheme() {
             this.isDarkMode = !this.isDarkMode;
             localStorage.setItem("theme", this.isDarkMode ? "dark" : "light");
             this.$vuetify.theme.dark = this.isDarkMode;
         },
-
-        handleLoginSuccess(user) {
-            this.showLoginPopup = false;
+        handleAuthSuccess() {
+            this.showAuthPopup = false;
+        },
+        async logout() {
+            try {
+                await this.$store.dispatch("logout");
+            } catch (error) {
+                console.error("Logout error:", error);
+            }
         },
     },
 };

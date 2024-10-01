@@ -1,4 +1,20 @@
 {
+  "materialdesignicons-webfont.eot": {
+    "file": "materialdesignicons-webfont.eot",
+    "src": "materialdesignicons-webfont.eot"
+  },
+  "materialdesignicons-webfont.ttf": {
+    "file": "materialdesignicons-webfont.ttf",
+    "src": "materialdesignicons-webfont.ttf"
+  },
+  "materialdesignicons-webfont.woff": {
+    "file": "materialdesignicons-webfont.woff",
+    "src": "materialdesignicons-webfont.woff"
+  },
+  "materialdesignicons-webfont.woff2": {
+    "file": "materialdesignicons-webfont.woff2",
+    "src": "materialdesignicons-webfont.woff2"
+  },
   "node_modules/@mdi/font/fonts/materialdesignicons-webfont.eot": {
     "file": "materialdesignicons-webfont.eot",
     "src": "node_modules/@mdi/font/fonts/materialdesignicons-webfont.eot"

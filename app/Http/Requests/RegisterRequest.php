@@ -25,8 +25,8 @@ class RegisterRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:8|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/',
         ];
     }
 
@@ -44,7 +44,7 @@ class RegisterRequest extends FormRequest
             'email.unique' => 'Email has already been taken',
             'password.required' => 'Password is required',
             'password.min' => 'Password must be at least 6 characters',
-            'password.confirmed' => 'Password confirmation does not match',
+            'password.regex' => 'The password must contain uppercase and lowercase letters, as well as a number.',
         ];
     }
 }

@@ -5,17 +5,15 @@ namespace App\Repositories;
 use App\Repositories\Interfaces\UserAuthenticationInterface;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AuthRepository implements UserAuthenticationInterface
 {
     public function login(array $credentials): mixed
     {
-        try {
-            if (! $token = JWTAuth::attempt($credentials)) {
-                return response()->json(['error' => 'invalid_credentials'], 400);
-            }
-        } catch (JWTException $e) {
-            return response()->json(['error' => 'could_not_create_token'], 500);
+
+        if (! $token = JWTAuth::attempt($credentials)) {
+            throw new NotFoundHttpException('Invalid credentials');
         }
 
         return $token;

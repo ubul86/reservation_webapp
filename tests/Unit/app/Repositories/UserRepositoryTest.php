@@ -5,41 +5,41 @@ namespace Tests\Unit;
 use App\Repositories\AuthRepository;
 use App\Repositories\Interfaces\UserAuthenticationInterface;
 use App\Repositories\Interfaces\UserRegistrationInterface;
+use App\Repositories\Interfaces\UserRepositoryInterface;
 use Tests\TestCase;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Repositories\UserRepository;
-use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Repositories\UserRegistrationRepository;
 
 class UserRepositoryTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected UserRegistrationInterface $userRepository;
-    protected UserAuthenticationInterface $authRepository;
-
     protected UserRegistrationInterface $userRegistrationRepository;
+    protected UserAuthenticationInterface $authRepository;
+    protected UserRepositoryInterface $userRepository;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->userRepository = new UserRepository();
+        $this->userRegistrationRepository = new UserRegistrationRepository();
         $this->authRepository = new AuthRepository();
-        $this->userRegistrationRepository = new UserRepository();
+        $this->userRepository = new UserRepository();
     }
 
     /** @test */
     public function it_can_register_a_user()
     {
-        $data = [
+        $data = new \App\Http\Requests\RegisterRequest([
             'name' => 'John Doe',
             'email' => 'johndoe@example.com',
             'password' => 'password123'
-        ];
+        ]);
 
-        $user = $this->userRegistrationRepository->register($data);
+        $user = $this->userRegistrationRepository->registration($data);
 
         $this->assertInstanceOf(User::class, $user);
         $this->assertTrue(Hash::check('password123', $user->password));
@@ -73,13 +73,9 @@ class UserRepositoryTest extends TestCase
         ];
 
         JWTAuth::shouldReceive('attempt')->with($credentials)->andReturn(false);
-        $response = $this->authRepository->login($credentials);
 
-        $this->assertInstanceOf(\Illuminate\Http\JsonResponse::class, $response);
-        $this->assertEquals(400, $response->status());
-
-        $responseData = $response->getData(true);
-        $this->assertEquals(['error' => 'invalid_credentials'], $responseData);
+        $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
+        $this->authRepository->login($credentials);
     }
 
     /** @test */

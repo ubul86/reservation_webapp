@@ -4,6 +4,11 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Place;
+use App\Models\ReservationTime;
+use App\Models\ReservationDate;
+use App\Models\User;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,17 +18,11 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
-        \App\Models\User::factory(10)->create();
-        \App\Models\Place::factory(5)->create();
-        \App\Models\ReservationDate::factory(30)->create();
+        User::factory(10)->create();
+        Place::factory(5)->create();
+        ReservationDate::factory(10)->create();
 
-        \App\Models\ReservationTime::factory(50)->create();
+        ReservationTime::factory(50)->create();
 
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
     }
 }
