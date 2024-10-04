@@ -90,6 +90,7 @@ export default {
                 date: this.$store.state.selectedDate,
                 hour: this.hour,
                 placeId: this.placeId,
+                id: this.reservation ? this.reservation.id : null,
             };
         },
     },

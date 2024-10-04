@@ -23,4 +23,5 @@ Route::middleware('auth.api')->group(function () {
     Route::get('/user', [UserController::class, 'getUser']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/reservation/bulk-store', [ReservationController::class, 'bulkStore']);
+    Route::delete('/reservation/{id}', [ReservationController::class, 'delete']);
 });

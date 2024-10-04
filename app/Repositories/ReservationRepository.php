@@ -51,4 +51,16 @@ class ReservationRepository implements ReservationRepositoryInterface
         return $newReservation->getTransformedArray();
     }
 
+    public function delete(int $id): bool
+    {
+        try{
+            $reservation = ReservationTime::findOrFail($id);
+            $reservation->delete();
+            return true;
+        }
+        catch(\Exception $e) {
+            return false;
+        }
+    }
+
 }

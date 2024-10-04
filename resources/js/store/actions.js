@@ -103,5 +103,12 @@ export default {
             throw error;
         }
     },
-    deleteReservation({ commit }, reservation) {},
+    async deleteReservation({ commit }, reservation) {
+        try {
+            await ReservationService.deleteReservation(reservation.id);
+            commit('DELETE_RESERVATION', reservation.id);
+        } catch (error) {
+            throw error;
+        }
+    },
 };

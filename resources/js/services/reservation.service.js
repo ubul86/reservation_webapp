@@ -14,6 +14,14 @@ class ReservationService {
                 return response.data;
             });
     }
+
+    deleteReservation(selectedReservationId) {
+        return privateApi
+            .delete(`/reservation/${selectedReservationId}`)
+            .then((response) => {
+                return response.data;
+            });
+    }
 }
 
 export default new ReservationService();

@@ -6,6 +6,7 @@ use App\Repositories\Interfaces\ReservationRepositoryInterface;
 use App\Repositories\ReservationRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use RuntimeException;
 
 class ReservationController extends Controller
 {
@@ -37,6 +38,17 @@ class ReservationController extends Controller
         }
 
         return response()->json($storedReservations);
+    }
+
+    public function delete(int $id): JsonResponse
+    {
+        $result = $this->reservationRepository->delete($id);
+
+        if (!$result) {
+            throw new RuntimeException('Error', 500);
+        }
+
+        return response()->json(['message' => 'Successfully deleted reservation']);
     }
 
 }

@@ -8,4 +8,6 @@ interface ReservationRepositoryInterface
 
     public function storeSelectedReservation(array $reservation): array;
 
+    public function delete(int $id): bool;
+
 }

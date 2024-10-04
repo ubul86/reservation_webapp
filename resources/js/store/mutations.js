@@ -36,6 +36,11 @@ export default {
                 reservation.placeId !== objectToRemove.placeId,
         );
     },
+    DELETE_RESERVATION(state, reservationId) {
+        state.reservations = state.reservations.filter(
+            (reservation) => reservation.id !== reservationId,
+        );
+    },
     EMPTY_SELECTED_RESERVATIONS(state) {
         state.selectedReservations = [];
     },

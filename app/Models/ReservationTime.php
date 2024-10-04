@@ -5,13 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ReservationTime extends Model
 {
     use HasFactory;
-
-    use SoftDeletes;
 
     protected $table = 'reservation_times';
 
@@ -49,6 +46,7 @@ class ReservationTime extends Model
     public function getTransformedArray(): array
     {
         return [
+            'id' => $this->id,
             'hour' => $this->hour,
             'place' => $this->place->name,
             'place_id' => $this->place->id,
