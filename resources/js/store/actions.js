@@ -1,6 +1,7 @@
 import AuthService from "@/services/auth.service.js";
 import ReservationService from "@/services/reservation.service";
 import PlaceService from "@/services/place.service.js";
+import UserService from "@/services/user.service.js";
 
 export default {
     initializeUser({ commit }) {
@@ -16,6 +17,13 @@ export default {
         try {
             const response = await AuthService.login(user);
             commit("SET_USER", response);
+
+            const userData = await UserService.getUser();
+            commit("SET_USERDATA", {
+                token: response.token,
+                ...userData.user,
+            });
+
             return response;
         } catch (error) {
             console.error("Login failed:", error);
@@ -42,6 +50,20 @@ export default {
         }
     },
 
+    async getUserData({ state, commit }) {
+        if (!state.user) {
+            return false;
+        }
+        try {
+            const userData = await UserService.getUser();
+            commit("SET_USERDATA", {
+                ...userData.user,
+            });
+        } catch (error) {
+            console.error("fetch User data failed");
+        }
+    },
+
     async fetchPlaces({ commit }) {
         const response = await PlaceService.getPlaces();
         commit("SET_PLACES", response.data);
@@ -53,8 +75,33 @@ export default {
         commit("SET_RESERVATIONS", response.data);
     },
 
+    addReservation({ commit }, reservation) {
+        commit("ADD_SELECTED_RESERVATION", reservation);
+    },
+    removeReservation({ commit }, reservation) {
+        commit("REMOVE_SELECTED_RESERVATION", reservation);
+    },
+
     updateSelectedDate({ commit, dispatch }, date) {
         commit("SET_SELECTED_DATE", date);
         dispatch("fetchReservations");
     },
+    async storeSelectedReservations({ state, commit }) {
+        try {
+            const response =
+                await ReservationService.bulkStoreSelectedReservations(
+                    state.selectedReservations,
+                );
+            if (response) {
+                commit(
+                    "ADD_CREATED_RESERVATIONS_TO_STORED_RESERVATIONS",
+                    response.data,
+                );
+                commit("EMPTY_SELECTED_RESERVATIONS");
+            }
+        } catch (error) {
+            throw error;
+        }
+    },
+    deleteReservation({ commit }, reservation) {},
 };

@@ -4,9 +4,13 @@ export default {
         state.user = user;
         localStorage.setItem("user", JSON.stringify(user));
     },
+    SET_USERDATA(state, userData) {
+        state.userData = userData;
+    },
     LOGOUT(state) {
         state.isAuthenticated = false;
         state.user = null;
+        state.userData = null;
         localStorage.removeItem("user");
     },
     SET_USER_ID(state, userId) {
@@ -20,5 +24,25 @@ export default {
     },
     SET_PLACES(state, places) {
         state.places = places;
-    }
+    },
+    ADD_SELECTED_RESERVATION(state, reservation) {
+        state.selectedReservations.push(reservation);
+    },
+    REMOVE_SELECTED_RESERVATION(state, objectToRemove) {
+        state.selectedReservations = state.selectedReservations.filter(
+            (reservation) =>
+                reservation.date !== objectToRemove.date ||
+                reservation.hour !== objectToRemove.hour ||
+                reservation.placeId !== objectToRemove.placeId,
+        );
+    },
+    EMPTY_SELECTED_RESERVATIONS(state) {
+        state.selectedReservations = [];
+    },
+    ADD_CREATED_RESERVATIONS_TO_STORED_RESERVATIONS(
+        state,
+        createdReservations,
+    ) {
+        state.reservations.push(...createdReservations);
+    },
 };

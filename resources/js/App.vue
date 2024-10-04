@@ -17,6 +17,7 @@ export default {
     created() {
         this.$store.dispatch("initializeUser");
         this.$store.dispatch("storeUserLocation");
+        this.$store.dispatch("getUserData");
     },
 };
 </script>

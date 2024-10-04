@@ -7,9 +7,12 @@ class AuthService {
                 email: user.username,
                 password: user.password,
             })
-            .then((response) => {
+            .then(async (response) => {
                 if (response.data.data.token) {
-                    localStorage.setItem("user", JSON.stringify(response.data.data.token));
+                    localStorage.setItem(
+                        "user",
+                        JSON.stringify(response.data.data.token),
+                    );
                 }
                 return response.data.data;
             });
@@ -18,8 +21,14 @@ class AuthService {
     logout() {
         return privateApi.post("/logout").then((response) => {
             localStorage.removeItem("user");
+            localStorage.removeItem("userData");
             return response.data.data;
         });
+    }
+
+    removeToken() {
+        localStorage.removeItem("user");
+        localStorage.removeItem("userData");
     }
 
     registration(user) {
@@ -35,9 +44,13 @@ class AuthService {
         return user ? user.token : null;
     }
 
+    setToken(token) {
+        localStorage.setItem("user", JSON.stringify(token));
+    }
+
     activation(token) {
         return publicApi.post("/activation", {
-            token: token
+            token,
         });
     }
 }

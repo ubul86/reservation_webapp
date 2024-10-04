@@ -1,6 +1,7 @@
 <template>
     <v-container>
         <DatePickerWithNavigation />
+        <SelectedReservation />
         <v-tabs v-model="tab">
             <v-tab v-for="place in places" :key="place.id">
                 {{ place.name }}
@@ -18,9 +19,12 @@
                     :class="getReservationClass(place.id, hour)"
                     cols="4"
                 >
-                    <v-card>
-                        <v-card-title>{{ formatHour(hour) }}</v-card-title>
-                    </v-card>
+                    <TimeCardComponent
+                        :hour="hour"
+                        :reservation="getReservation(place.id, hour)"
+                        :placeId="place.id"
+                        :date="this.selectedDate"
+                    />
                 </v-col>
             </v-tab-item>
         </v-tabs>
@@ -29,15 +33,19 @@
 
 <script>
 import DatePickerWithNavigation from "./DatePickerWithNavigation.vue";
+import TimeCardComponent from "@/components/TimeCardComponent.vue";
+import SelectedReservation from "@/components/SelectedReservation.vue";
 
 export default {
     components: {
+        SelectedReservation,
         DatePickerWithNavigation,
+        TimeCardComponent,
     },
     data() {
         return {
             tab: 0,
-            hours: Array.from({ length: 15 }, (_, i) => i + 8)
+            hours: Array.from({ length: 15 }, (_, i) => i + 8),
         };
     },
     computed: {
@@ -47,15 +55,22 @@ export default {
         reservations() {
             return this.$store.state.reservations;
         },
+        selectedDate() {
+            return this.$store.state.selectedDate;
+        },
     },
     methods: {
+        getReservation(placeId, hour) {
+            const reservation = this.reservations.find(
+                (res) => res.place_id === placeId && res.hour === hour,
+            );
+            return reservation;
+        },
         formatHour(hour) {
             return `${hour}:00`;
         },
         getReservationClass(placeId, hour) {
-            const reservation = this.reservations.find(
-                (res) => res.place_id === placeId && res.hour === hour,
-            );
+            const reservation = this.getReservation(placeId, hour);
             return reservation ? "bg-green" : "";
         },
     },
