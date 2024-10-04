@@ -45,4 +45,17 @@ class ReservationTime extends Model
     {
         return $this->belongsTo(Place::class);
     }
+
+    public function getTransformedArray(): array
+    {
+        return [
+            'hour' => $this->hour,
+            'place' => $this->place->name,
+            'place_id' => $this->place->id,
+            'user' => $this->user->name,
+            'user_id' => $this->user->id,
+            'reservation_date' => $this->reservationDate->date,
+        ];
+    }
+
 }

@@ -11,6 +11,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use RuntimeException;
 use Exception;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -61,6 +62,19 @@ class AuthController extends Controller
             throw new RuntimeException('Could not invalidate token', 500);
         } catch (JWTException $e) {
             throw $e;
+        }
+    }
+
+    public function refreshToken(): JsonResponse
+    {
+        try {
+            $token = JWTAuth::parseToken()->refresh();
+
+            return response()->json([
+                'token' => $token,
+            ]);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Could not refresh token'], 401);
         }
     }
 

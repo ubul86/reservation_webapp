@@ -26,4 +26,17 @@ class ReservationController extends Controller
 
         return response()->json($reservedTimes);
     }
+
+    public function bulkStore(Request $request): JsonResponse
+    {
+
+        $reservations = $request->post();
+        $storedReservations = [];
+        foreach ($reservations as $reservation) {
+            $storedReservations[] = $this->reservationRepository->storeSelectedReservation($reservation);
+        }
+
+        return response()->json($storedReservations);
+    }
+
 }

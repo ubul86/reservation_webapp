@@ -2,9 +2,11 @@
 
 namespace App\Repositories;
 
+use App\Models\ReservationDate;
 use App\Models\ReservationTime;
 use Illuminate\Support\Carbon;
 use App\Repositories\Interfaces\ReservationRepositoryInterface;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class ReservationRepository implements ReservationRepositoryInterface
 {
@@ -24,16 +26,29 @@ class ReservationRepository implements ReservationRepositoryInterface
             ->with('place', 'user', 'reservationDate')
             ->get()
             ->map(function ($reservation) {
-                return [
-                    'hour' => $reservation->hour,
-                    'place' => $reservation->place->name,
-                    'place_id' => $reservation->place->id,
-                    'user' => $reservation->user->name,
-                    'reservation_date' => $reservation->reservationDate->date,
-                ];
+                return $reservation->getTransformedArray();
             })
             ->toArray();
 
         return $reservedTimes;
     }
+
+    public function storeSelectedReservation(array $reservation): array
+    {
+        $user = JWTAuth::parseToken()->authenticate();
+
+        $reservationDate = ReservationDate::firstOrCreate(
+            ['date' => $reservation['date']]
+        );
+
+        $newReservation = ReservationTime::create([
+            'user_id' => $user->id,
+            'reservation_date_id' => $reservationDate->id,
+            'place_id' => $reservation['placeId'],
+            'hour' => $reservation['hour']
+        ]);
+
+        return $newReservation->getTransformedArray();
+    }
+
 }
