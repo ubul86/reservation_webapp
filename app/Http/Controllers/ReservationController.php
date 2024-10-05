@@ -3,14 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\Interfaces\ReservationRepositoryInterface;
-use App\Repositories\ReservationRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use RuntimeException;
 
 class ReservationController extends Controller
 {
-    protected ReservationRepository $reservationRepository;
+    protected ReservationRepositoryInterface $reservationRepository;
 
     public function __construct(ReservationRepositoryInterface $reservationRepository)
     {
@@ -31,7 +30,7 @@ class ReservationController extends Controller
     public function bulkStore(Request $request): JsonResponse
     {
 
-        $reservations = $request->post();
+        $reservations = $request->all();
         $storedReservations = [];
         foreach ($reservations as $reservation) {
             $storedReservations[] = $this->reservationRepository->storeSelectedReservation($reservation);
@@ -50,5 +49,4 @@ class ReservationController extends Controller
 
         return response()->json(['message' => 'Successfully deleted reservation']);
     }
-
 }

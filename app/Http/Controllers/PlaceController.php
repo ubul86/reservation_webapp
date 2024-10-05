@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 
 class PlaceController extends Controller
 {
-    protected PlaceRepository $placeRepository;
+    protected PlaceRepositoryInterface $placeRepository;
 
     public function __construct(PlaceRepositoryInterface $placeRepository)
     {

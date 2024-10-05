@@ -48,12 +48,11 @@ class ReservationTime extends Model
         return [
             'id' => $this->id,
             'hour' => $this->hour,
-            'place' => $this->place->name,
-            'place_id' => $this->place->id,
-            'user' => $this->user->name,
-            'user_id' => $this->user->id,
-            'reservation_date' => $this->reservationDate->date,
+            'place' => $this->place?->name,
+            'place_id' => $this->place?->id,
+            'user' => $this->user?->name,
+            'user_id' => $this->user?->id,
+            'reservation_date' => $this->reservationDate?->date,
         ];
     }
-
 }

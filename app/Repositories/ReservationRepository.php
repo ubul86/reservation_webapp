@@ -35,7 +35,11 @@ class ReservationRepository implements ReservationRepositoryInterface
 
     public function storeSelectedReservation(array $reservation): array
     {
-        $user = JWTAuth::parseToken()->authenticate();
+        $user = auth()->user();
+
+        if (!$user) {
+            throw new \Exception('User authentication failed.');
+        }
 
         $reservationDate = ReservationDate::firstOrCreate(
             ['date' => $reservation['date']]
@@ -53,14 +57,12 @@ class ReservationRepository implements ReservationRepositoryInterface
 
     public function delete(int $id): bool
     {
-        try{
+        try {
             $reservation = ReservationTime::findOrFail($id);
             $reservation->delete();
             return true;
-        }
-        catch(\Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
     }
-
 }
